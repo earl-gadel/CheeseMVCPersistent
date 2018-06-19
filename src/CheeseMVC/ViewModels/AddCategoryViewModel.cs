@@ -8,7 +8,7 @@ namespace CheeseMVC.ViewModels
 {
     public class AddCategoryViewModel
     {
-        public string Name { get; set; }
         [Display(Name = "Category Name")]
+        public string Name { get; set; }
     }
 }
