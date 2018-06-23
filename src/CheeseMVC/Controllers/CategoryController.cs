@@ -16,7 +16,8 @@ namespace CheeseMVC.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            return View();
+            var category = context.Categories.ToList();
+            return View(category);
         }
 
         public IActionResult Add()
@@ -26,11 +27,15 @@ namespace CheeseMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(AddCategoryViewModel addCategaoryViewModel)
+        public IActionResult Add(AddCategoryViewModel addCategoryViewModel)
         {
             if (ModelState.IsValid)
             {
-                CheeseCategory newCategory = new CheeseCategory();
+                CheeseCategory newCategory = new CheeseCategory
+                {
+                    Name = addCategoryViewModel.Name
+                };
+
                 context.Categories.Add(newCategory);
                 context.SaveChanges();
                 return Redirect("/Category");
