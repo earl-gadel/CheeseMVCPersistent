@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CheeseMVC.ViewModels;
 using CheeseMVC.Data;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CheeseMVC.Controllers
 {
@@ -19,8 +20,8 @@ namespace CheeseMVC.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            List<Cheese> cheeses = context.Cheeses.ToList();
-
+            List<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
+            //List<Cheese> cheeses = context.Cheeses.ToList();
             return View(cheeses);
         }
 
@@ -35,12 +36,15 @@ namespace CheeseMVC.Controllers
         {
             if (ModelState.IsValid)
             {
+                CheeseCategory newCheeseCategory = 
+                    context.Categories.Single(c => c.ID == addCheeseViewModel.CategoryID);
                 // Add the new cheese to my existing cheeses
                 Cheese newCheese = new Cheese
                 {
                     Name = addCheeseViewModel.Name,
                     Description = addCheeseViewModel.Description,
-                    Type = addCheeseViewModel.Type
+                    Category = newCheeseCategory
+                    //Type = addCheeseViewModel.Type
                 };
 
                 context.Cheeses.Add(newCheese);
@@ -71,6 +75,22 @@ namespace CheeseMVC.Controllers
             context.SaveChanges();
 
             return Redirect("/");
+        }
+
+        public IActionResult Category(int id)
+        {
+            if (id == 0)
+            {
+                return Redirect("/Category");
+            }
+
+            CheeseCategory theCategory = context.Categories
+                .Include(Category => Category.Cheeses)
+                .Single(Category => Category.ID == id);
+
+            ViewBag.title = "Cheeses in category: " + theCategory.Name;
+
+            return View("Index", theCategory.Cheeses);
         }
     }
 }
