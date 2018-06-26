@@ -27,7 +27,8 @@ namespace CheeseMVC.Controllers
 
         public IActionResult Add()
         {
-            AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel();
+            AddCheeseViewModel addCheeseViewModel = 
+                new AddCheeseViewModel(context.Categories.ToList());
             return View(addCheeseViewModel);
         }
 
@@ -44,7 +45,6 @@ namespace CheeseMVC.Controllers
                     Name = addCheeseViewModel.Name,
                     Description = addCheeseViewModel.Description,
                     Category = newCheeseCategory
-                    //Type = addCheeseViewModel.Type
                 };
 
                 context.Cheeses.Add(newCheese);
