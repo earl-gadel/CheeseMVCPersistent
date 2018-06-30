@@ -1,7 +1,9 @@
 ﻿@model CheeseMVC.ViewModels.ViewMenuViewModel
 
- 
-<title>@Model.Menu.Name</title>
+ @{ 
+     ViewBag.Title = Model.Menu.Name;
+ }
+
 
 
 <ul>
