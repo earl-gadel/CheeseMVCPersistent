@@ -53,6 +53,7 @@ namespace CheeseMVC.Controllers
             return View(addMenuViewModel);
         }
 
+        [HttpGet]
         public IActionResult ViewMenu(int id)
         {
             List<CheeseMenu> items = context
